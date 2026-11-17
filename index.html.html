@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanejaAula | Assistente Pedagógico</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: 'Montserrat', Arial, sans-serif;
+  background: #f4f6fa;
+  color: #263449;
+}
+
+header {
+  background: linear-gradient(120deg, #064b96, #0874bd);
+  color: white;
+  padding: 30px 7%;
+}
+
+header h1 {
+  margin: 0 0 8px;
+  font-size: 27px;
+}
+
+header p {
+  margin: 0;
+  font-size: 14px;
+  opacity: .9;
+}
+
+.container {
+  max-width: 1050px;
+  margin: 30px auto;
+  padding: 0 20px;
+}
+
+.card {
+  background: white;
+  border-radius: 14px;
+  padding: 25px;
+  margin-bottom: 20px;
+  box-shadow: 0 3px 15px rgba(0,0,0,.05);
+}
+
+h2 {
+  color: #0754a0;
+  font-size: 19px;
+  margin-top: 0;
+}
+
+.intro {
+  font-size: 14px;
+  color: #657286;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 17px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+}
+
+.field.full { grid-column: 1 / -1; }
+
+label {
+  font-size: 13px;
+  font-weight: bold;
+  color: #35445a;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #d8e0e9;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+  background: white;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #0874bd;
+  box-shadow: 0 0 0 2px rgba(8,116,189,.10);
+}
+
+textarea {
+  min-height: 95px;
+  resize: vertical;
+}
+
+button {
+  border: none;
+  border-radius: 8px;
+  padding: 13px 22px;
+  font-family: inherit;
+  font-weight: bold;
+  cursor: pointer;
+  transition: .2s;
+}
+
+button:hover { opacity: .88; }
+
+.primary {
+  background: #f5a623;
+  color: #17365d;
+  width: 100%;
+  margin-top: 20px;
+}
+
+.secondary {
+  background: #eaf1f8;
+  color: #0754a0;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.resultado { display: none; }
+
+.resultado h2 {
+  border-bottom: 2px solid #f5a623;
+  padding-bottom: 12px;
+}
+
+.etapa {
+  border-left: 4px solid #f5a623;
+  padding: 12px 16px;
+  margin: 15px 0;
+  background: #f8fafc;
+  border-radius: 0 8px 8px 0;
+}
+
+.etapa h3 {
+  color: #0754a0;
+  font-size: 15px;
+  margin: 0 0 8px;
+}
+
+.etapa p, .etapa li {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.tag {
+  display: inline-block;
+  background: #e8f1fb;
+  color: #0754a0;
+  padding: 6px 10px;
+  border-radius: 20px;
+  font-size: 11px;
+  margin: 3px;
+}
+
+.aviso {
+  font-size: 12px;
+  color: #66758a;
+  line-height: 1.6;
+}
+
+footer {
+  text-align: center;
+  padding: 25px;
+  color: #748094;
+  font-size: 11px;
+}
+
+@media(max-width:650px) {
+  .grid { grid-template-columns: 1fr; }
+  .field.full { grid-column: auto; }
+  header h1 { font-size: 22px; }
+}
+
+@media print {
+  body { background: white; }
+  header, .formulario, .actions, footer { display: none; }
+  .resultado { display: block !important; }
+  .card { box-shadow: none; }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>PlanejaAula</h1>
+  <p>Assistente Pedagógico Inteligente | Planejamento que transforma a aprendizagem.</p>
+</header>
+
+<main class="container">
+
+<section class="card formulario">
+  <h2>Vamos planejar sua aula?</h2>
+  <p class="intro">
+    Informe os dados da Unidade Curricular. A ferramenta organizará
+    uma proposta de sequência didática com metodologias, atividades
+    e estratégias de avaliação.
+  </p>
+
+  <div class="grid">
+
+    <div class="field full">
+      <label>Unidade Curricular (UC)</label>
+      <input id="uc" placeholder="Ex.: Gestão de Pessoas">
+    </div>
+
+    <div class="field">
+      <label>Carga horária total (horas)</label>
+      <input id="horas" type="number" min="1" placeholder="Ex.: 40">
+    </div>
+
+    <div class="field">
+      <label>Modalidade</label>
+      <select id="modalidade">
+        <option>Presencial</option>
+        <option>Educação a Distância</option>
+        <option>Híbrida</option>
+      </select>
+    </div>
+
+    <div class="field full">
+      <label>Competências a desenvolver</label>
+      <textarea id="competencias"
+        placeholder="Descreva as competências previstas para a UC..."></textarea>
+    </div>
+
+    <div class="field full">
+      <label>Indicadores de aprendizagem</label>
+      <textarea id="indicadores"
+        placeholder="Informe os indicadores que demonstram o desenvolvimento das competências..."></textarea>
+    </div>
+
+    <div class="field full">
+      <label>Perfil da turma (opcional)</label>
+      <textarea id="turma" placeholder="Ex.: Jovens e adultos, iniciantes na área, turma com experiência profissional..."></textarea>
+    </div>
+
+    <div class="field full">
+      <label>Preferência metodológica (opcional)</label>
+      <select id="metodo">
+        <option value="variadas">Variar metodologias ativas</option>
+        <option value="problemas">Aprendizagem baseada em problemas</option>
+        <option value="projetos">Aprendizagem baseada em projetos</option>
+        <option value="casos">Estudo de casos</option>
+        <option value="gamificacao">Gamificação</option>
+        <option value="invertida">Sala de aula invertida</option>
+      </select>
+    </div>
+
+  </div>
+
+  <button class="primary" onclick="gerarPlanejamento()">
+    ✦ Gerar planejamento pedagógico
+  </button>
+</section>
+
+<section class="card resultado" id="resultado">
+
+  <h2>Seu planejamento pedagógico</h2>
+
+  <div id="cabecalho"></div>
+
+  <div class="etapa">
+    <h3>1. Objetivo de aprendizagem</h3>
+    <div id="objetivo"></div>
+  </div>
+
+  <h2>2. Sequência didática sugerida</h2>
+  <p class="intro">Distribuição da carga horária em etapas de aprendizagem.</p>
+  <div id="sequencia"></div>
+
+  <h2>3. Estratégias metodológicas</h2>
+  <div id="metodologias"></div>
+
+  <h2>4. Recursos didáticos e ODAs</h2>
+  <div id="recursos"></div>
+
+  <h2>5. Estratégias de avaliação</h2>
+  <div id="avaliacao"></div>
+
+  <h2>6. Orientações ao docente</h2>
+  <div id="orientacoes"></div>
+
+  <p class="aviso">
+    Esta é uma proposta inicial de planejamento. Revise e adapte
+    as atividades, os tempos e as estratégias considerando a
+    realidade da turma, as competências e os indicadores da UC.
+  </p>
+
+</section>
+
+<div class="actions" id="acoes" style="display:none">
+  <button class="secondary" onclick="window.print()">Imprimir / Salvar PDF</button>
+  <button class="secondary" onclick="copiarPlanejamento()">Copiar planejamento</button>
+  <button class="secondary" onclick="voltar()">Novo planejamento</button>
+</div>
+
+</main>
+
+<footer>
+  PlanejaAula | Uma proposta de apoio ao planejamento docente.
+</footer>
+
+<script>
+
+function escapar(texto) {
+  return String(texto).replace(/[&<>"']/g, c => ({
+    '&':'&amp;', '<':'&lt;', '>':'&gt;',
+    '"':'&quot;', "'":'&#39;'
+  }[c]));
+}
+
+function gerarPlanejamento() {
+
+  const uc = document.getElementById('uc').value.trim();
+  const horas = Number(document.getElementById('horas').value);
+  const competencias = document.getElementById('competencias').value.trim();
+  const indicadores = document.getElementById('indicadores').value.trim();
+  const turma = document.getElementById('turma').value.trim();
+  const modalidade = document.getElementById('modalidade').value;
+  const metodo = document.getElementById('metodo').value;
+
+  if (!uc || !horas || horas < 1 || !competencias || !indicadores) {
+    alert('Preencha a UC, a carga horária, as competências e os indicadores.');
+    return;
+  }
+
+  const porcentagens = [0.15, 0.30, 0.35, 0.20];
+  const nomes = [
+    'Mobilização e contextualização',
+    'Construção do conhecimento',
+    'Experimentação e prática',
+    'Síntese e avaliação'
+  ];
+
+  const descricoes = [
+    'Apresente uma situação desafiadora relacionada à realidade profissional. Explore os conhecimentos prévios dos estudantes e estabeleça conexões com a competência da UC.',
+    'Desenvolva os conhecimentos necessários por meio de exposição dialogada, investigação, leitura orientada e atividades colaborativas.',
+    'Proponha situações práticas que permitam aos estudantes aplicar os conhecimentos, tomar decisões e resolver desafios relacionados ao contexto profissional.',
+    'Promova a socialização dos resultados, a reflexão sobre as aprendizagens e a verificação dos indicadores de aprendizagem.'
+  ];
+
+  const atividades = [
+    'Tempestade de ideias, pergunta disparadora e análise de uma situação-problema.',
+    'Pesquisa orientada, mapa conceitual, debate e construção coletiva.',
+    'Estudo de caso, simulação, desafio prático ou desenvolvimento de projeto.',
+    'Apresentação dos resultados, autoavaliação e devolutiva do docente.'
+  ];
+
+  const metodologias = {
+    variadas: [
+      'Aprendizagem baseada em problemas',
+      'Estudo de casos',
+      'Gamificação',
+      'Aprendizagem colaborativa',
+      'Sala de aula invertida'
+    ],
+    problemas: [
+      'Aprendizagem baseada em problemas',
+      'Investigação orientada',
+      'Resolução colaborativa de desafios'
+    ],
+    projetos: [
+      'Aprendizagem baseada em projetos',
+      'Aprendizagem colaborativa',
+      'Socialização de projetos'
+    ],
+    casos: [
+      'Estudo de casos',
+      'Discussão orientada',
+      'Simulação de situações profissionais'
+    ],
+    gamificacao: [
+      'Gamificação',
+      'Desafios por equipes',
+      'Quiz interativo',
+      'Missões de aprendizagem'
+    ],
+    invertida: [
+      'Sala de aula invertida',
+      'Estudo prévio orientado',
+      'Discussão e aplicação prática'
+    ]
+  };
+
+  // Distribuição das horas
+  let horasEtapas = porcentagens.map(p => Math.floor(horas * p));
+  let restante = horas - horasEtapas.reduce((a,b) => a+b,0);
+
+  for (let i = 0; restante > 0; i++, restante--) {
+    horasEtapas[i % 4]++;
+  }
+
+  document.getElementById('cabecalho').innerHTML = `
+    <p><strong>Unidade Curricular:</strong> ${escapar(uc)}</p>
+    <p><strong>Carga horária:</strong> ${horas} horas</p>
+    <p><strong>Modalidade:</strong> ${escapar(modalidade)}</p>
+    ${turma ? `<p><strong>Perfil da turma:</strong> ${escapar(turma)}</p>` : ''}
+    <p><strong>Competências:</strong><br>${escapar(competencias).replace(/\n/g,'<br>')}</p>
+    <p><strong>Indicadores:</strong><br>${escapar(indicadores).replace(/\n/g,'<br>')}</p>
+  `;
+
+  document.getElementById('objetivo').innerHTML = `
+    <p>Organizar experiências de aprendizagem que possibilitem
+    o desenvolvimento das competências previstas em
+    <strong>${escapar(uc)}</strong>, utilizando os indicadores
+    informados como referência para acompanhar as aprendizagens.</p>
+  `;
+
+  let sequenciaHTML = '';
+
+  nomes.forEach((nome, i) => {
+    sequenciaHTML += `
+      <div class="etapa">
+        <h3>${i+1}. ${nome}</h3>
+        <span class="tag">${horasEtapas[i]} horas</span>
+        <p>${descricoes[i]}</p>
+        <p><strong>Atividade sugerida:</strong> ${atividades[i]}</p>
+      </div>
+    `;
+  });
+
+  document.getElementById('sequencia').innerHTML = sequenciaHTML;
+
+  document.getElementById('metodologias').innerHTML =
+    metodologias[metodo].map(m => `<span class="tag">${m}</span>`).join('') +
+    `<p class="intro">As metodologias devem ser selecionadas conforme
+    a natureza dos conteúdos, os indicadores e o perfil da turma.</p>`;
+
+  document.getElementById('recursos').innerHTML = `
+    <ul>
+      <li>Vídeos e materiais audiovisuais relacionados ao tema.</li>
+      <li>Infográficos, apresentações e materiais de apoio.</li>
+      <li>Objetos Digitais de Aprendizagem (ODAs).</li>
+      <li>Ferramentas colaborativas e ambientes virtuais.</li>
+      <li>Materiais e instrumentos utilizados nas práticas profissionais.</li>
+    </ul>
+    <p class="intro">A seleção dos recursos deve considerar a acessibilidade,
+    a disponibilidade e a pertinência pedagógica.</p>
+  `;
+
+  document.getElementById('avaliacao').innerHTML = `
+    <ul>
+      <li><strong>Diagnóstica:</strong> levantamento dos conhecimentos prévios.</li>
+      <li><strong>Formativa:</strong> observação, participação, resolução de desafios e acompanhamento das atividades.</li>
+      <li><strong>Final:</strong> atividade prática ou situação-problema que permita verificar os indicadores de aprendizagem.</li>
+      <li><strong>Feedback:</strong> devolutiva individual e coletiva, com indicação de avanços e pontos a desenvolver.</li>
+    </ul>
+  `;
+
+  document.getElementById('orientacoes').innerHTML = `
+    <ul>
+      <li>Verifique se cada atividade contribui para as competências previstas.</li>
+      <li>Relacione os instrumentos avaliativos aos indicadores informados.</li>
+      <li>Contextualize as situações de aprendizagem com o mundo do trabalho.</li>
+      <li>Adapte as estratégias às características dos estudantes.</li>
+      <li>Reserve momentos para feedback e reflexão sobre a aprendizagem.</li>
+    </ul>
+  `;
+
+  document.getElementById('resultado').style.display = 'block';
+  document.getElementById('acoes').style.display = 'flex';
+
+  document.getElementById('resultado').scrollIntoView({
+    behavior: 'smooth'
+  });
+}
+
+function voltar() {
+  document.getElementById('resultado').style.display = 'none';
+  document.getElementById('acoes').style.display = 'none';
+  document.querySelector('.formulario').scrollIntoView({
+    behavior: 'smooth'
+  });
+}
+
+function copiarPlanejamento() {
+  const texto = document.getElementById('resultado').innerText;
+
+  navigator.clipboard.writeText(texto)
+    .then(() => alert('Planejamento copiado com sucesso!'))
+    .catch(() => alert('Não foi possível copiar automaticamente. Utilize a opção de impressão.'));
+}
+
+</script>
+</body>
+</html>
